@@ -1,6 +1,6 @@
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import ToggleButton from "./components/theme/toggleButton";
 import Home from "./page/Home";
+import Header from "./components/header/Header";
 
 export default function Router() {
   return (
@@ -16,9 +16,12 @@ export default function Router() {
 
 const Layout = () => {
   return (
-    <div>
-      <ToggleButton />
-      <Outlet />
+    <div className="p-6">
+      {/* <ToggleButton /> */}
+      <Header />
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 };
