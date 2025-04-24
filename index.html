@@ -9,5 +9,12 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%VITE_KAKAO_API_KEY_TEST%"></script>
+    <script type="text/javascript">
+      kakao.maps.load(function () {
+        // v3가 모두 로드된 후, 이 콜백 함수가 실행됩니다.
+        var map = new kakao.maps.Map(node, options);
+      });
+    </script>
   </body>
 </html>
