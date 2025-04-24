@@ -17,7 +17,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="w-full border-b bg-secondary px-5 py-3 shadow-sm mb-10  rounded-4xl">
+    <header className="m-auto border-b bg-secondary px-5 py-3 shadow-sm mb-10  rounded-4xl w-full md:max-w-2/3">
       <div className="mx-auto flex max-w-6xl items-center justify-between ">
         {/* 로고 */}
         <Link to="/" className="text-lg font-bold text-blue-600">

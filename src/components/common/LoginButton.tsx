@@ -20,11 +20,13 @@ export default function LoginButton() {
       </DialogTrigger>
       <DialogContent className="bg-secondary ">
         <DialogHeader>
-          <DialogTitle className="text-center mb-3 text-xl">로그인</DialogTitle>
+          <DialogTitle className="text-center mb-3 text-2xl">
+            로그인
+          </DialogTitle>
         </DialogHeader>
         <button
           onClick={gooogleLogin}
-          className="shadow border flex gap-x-2 items-center justify-center bg-white w-2/3 m-auto py-2 rounded-4xl cursor-pointer hover:bg-gray-200 text-black"
+          className="shadow border flex gap-x-2 items-center justify-center bg-white md:w-2/3 w-full m-auto py-2 rounded-4xl cursor-pointer hover:bg-gray-200 text-black"
         >
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png"
@@ -33,7 +35,11 @@ export default function LoginButton() {
           />
           구글로 로그인하기
         </button>
-        <button className="shadow border flex gap-x-2 items-center justify-center bg-white w-2/3 m-auto py-2 rounded-4xl cursor-pointer hover:bg-gray-200 text-black">
+
+        <button
+          onClick={gooogleLogin}
+          className="shadow border flex gap-x-2 items-center justify-center bg-white md:w-2/3 w-full m-auto py-2 rounded-4xl cursor-pointer hover:bg-gray-200 text-black"
+        >
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png"
             alt=""
