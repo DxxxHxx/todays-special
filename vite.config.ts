@@ -11,4 +11,22 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      "/api/blog": {
+        target: "https://openapi.naver.com/v1/search/blog",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/blog/, ""),
+        secure: false,
+        ws: true,
+      },
+      "/api/local": {
+        target: "https://openapi.naver.com/v1/search/local",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/local/, ""),
+        secure: false,
+        ws: true,
+      },
+    },
+  },
 });

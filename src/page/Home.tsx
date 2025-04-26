@@ -1,84 +1,69 @@
-import useSaveRecommandation from "@/hooks/useSaveRecommandation";
-import { getMenuRecommendation } from "@/service/openai";
 import { useState } from "react";
+import { getMenuRecommendation } from "../service/openai";
+import useSaveRecommandation from "@/hooks/useSaveRecommandation";
+import useFixedScroll from "@/hooks/useFixedScroll";
+import ChatMessage from "@/components/home/chat/ChatMessage";
 
-export default function HomePage() {
-  const [recommendation, setRecommendation] = useState<null | {
-    menu: string;
-    reason: string;
-  }>(null);
+import Prompt from "@/components/home/prompt/Prompt";
+
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+export default function Home() {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const { saveRecommandation } = useSaveRecommandation();
+  const anchoringRef = useFixedScroll(messages);
 
-  const handlePromptSubmit = async (prompt: string) => {
+  const requestRecommend = async () => {
+    const userMsg: ChatMessage = { role: "user", content: input };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
     setLoading(true);
-    const result = await getMenuRecommendation(prompt);
 
-    //db에 저장
+    const { menu, reason } = await getMenuRecommendation(input);
+    const aiMsg: ChatMessage = {
+      role: "assistant",
+      content: `${menu}\n\n${reason}`,
+    };
+
     await saveRecommandation({
-      desc: result.reason,
-      menu: result.menu,
-      prompt,
+      menu,
+      desc: reason,
+      prompt: input,
     });
-    setRecommendation(result);
+    setMessages((prev) => [...prev, aiMsg]);
     setLoading(false);
   };
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6 text-center">오늘 뭐 먹지? 🍽</h1>
-      <PromptSection onSubmit={handlePromptSubmit} />
-      {loading && <p className="mt-4 text-center">로딩 중...</p>}
-      {recommendation && !loading && (
-        <RecommendationResult
-          menu={recommendation.menu}
-          reason={recommendation.reason}
-        />
-      )}
-    </div>
-  );
-}
-
-function RecommendationResult({
-  menu,
-  reason,
-}: {
-  menu: string;
-  reason: string;
-}) {
-  return (
-    <div className="mt-6 p-4 bg--background text--primary rounded-lg shadow">
-      <h2 className="text-xl font-semibold mb-2">🥘 추천 메뉴: {menu}</h2>
-      <p className="">{reason}</p>
-    </div>
-  );
-}
-
-function PromptSection({ onSubmit }: { onSubmit: (prompt: string) => void }) {
-  const [prompt, setPrompt] = useState("든든한 한식 추천해줘");
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!prompt.trim()) return;
-    onSubmit(prompt);
-    setPrompt("");
+    if (!input.trim()) return;
+
+    await requestRecommend();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-4">
-      <textarea
-        className="w-full p-3 border rounded-lg resize-none"
-        placeholder="오늘 뭐 먹고 싶으신가요? (예: 든든한 한식 추천해줘)"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        rows={4}
-      />
-      <button
-        type="submit"
-        className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
-        추천 받기
-      </button>
-    </form>
+    <div className="mx-auto  p-4 space-y-4">
+      <div className="fixed w-full md:max-w-2/3 left-0 right-0 m-auto bottom-0 md:bottom-[50px]">
+        <div className="space-y-2 px-5 md:px-0 overflow-y-auto max-h-[400px] flex flex-col ">
+          {messages.map((msg, idx) => (
+            <ChatMessage key={idx} role={msg.role} content={msg.content} />
+          ))}
+          {loading && (
+            <ChatMessage role="assistant" content="추천 중이에요..." />
+          )}
+          <div ref={anchoringRef}></div>
+        </div>
+        <Prompt
+          handleSubmit={handleSubmit}
+          input={input}
+          setInput={setInput}
+          requestRecommend={requestRecommend}
+        />
+      </div>
+    </div>
   );
 }
