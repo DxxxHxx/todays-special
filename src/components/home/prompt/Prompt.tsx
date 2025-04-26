@@ -34,9 +34,13 @@ export default function Prompt({
         rows={5}
         cols={50}
         onKeyDown={async (e) => {
-          if (e.key !== "Enter") return;
-          e.preventDefault();
-          await requestRecommend();
+          if (e.key == "Enter") {
+            e.preventDefault();
+            if (e.nativeEvent.isComposing) {
+              return;
+            }
+            await requestRecommend();
+          }
         }}
       />
       <div className="absolute bottom-[10px] right-[10px] md:bottom-[20px] md:right-[20px] flex justify-center items-center gap-x-3">
