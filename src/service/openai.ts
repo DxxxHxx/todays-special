@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export async function getMenuRecommendation(prompt: string): Promise<{
   menu: string;
   reason: string;
@@ -15,23 +17,22 @@ export async function getMenuRecommendation(prompt: string): Promise<{
 이유: 든든하고 따뜻해서 비 오는 날에 잘 어울립니다.
 `;
 
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  const { data } = await axios.post(
+    "https://api.openai.com/v1/chat/completions",
+    {
       model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: prompt },
       ],
-    }),
-  });
-
-  const data = await res.json();
-  // console.log(data.choices.message.content);
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   // 예시 응답 파싱
   const content: string = data.choices?.[0]?.message?.content || "";
@@ -40,10 +41,13 @@ export async function getMenuRecommendation(prompt: string): Promise<{
   // console.log(menu, rest);
   // const reason = rest.join(" ").replace(/^[-:\s]+/, "");
 
-  const [menu, reason] = content.split("이유:");
+  const [menu, reason] = content.split("<br/>");
+  const filteredMenu =
+    menu.split("추천메뉴:").length > 1 ? menu.split("추천메뉴:")[1] : "";
 
+  console.log(filteredMenu);
   return {
-    menu,
+    menu: filteredMenu,
     reason,
   };
 }

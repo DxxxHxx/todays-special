@@ -26,14 +26,16 @@ export default function Home() {
     const { menu, reason } = await getMenuRecommendation(input);
     const aiMsg: ChatMessage = {
       role: "assistant",
-      content: `${menu}\n\n${reason}`,
+      content: `추천 메뉴 : ${menu}<br/>${reason ?? ""}`,
     };
 
-    await saveRecommandation({
-      menu,
-      desc: reason,
-      prompt: input,
-    });
+    if (menu) {
+      await saveRecommandation({
+        menu,
+        desc: reason,
+        prompt: input,
+      });
+    }
     setMessages((prev) => [...prev, aiMsg]);
     setLoading(false);
   };
