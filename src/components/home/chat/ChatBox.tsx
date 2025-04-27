@@ -23,12 +23,13 @@ export default function ChatBox({
   loading: boolean;
 }) {
   const anchoringRef = useFixedScroll(messages);
+
   return (
-    <div className="space-y-2 px-5 md:px-0 overflow-y-auto max-h-[400px] flex flex-col ">
+    <div className="space-y-2 relative px-5 md:px-0 overflow-y-auto max-h-[400px] flex flex-col ">
       {messages.map((msg, idx) => (
         <ChatMessage key={idx} role={msg.role} content={msg.content} />
       ))}
-      {loading && <ChatMessage role="assistant" content="추천 중이에요..." />}
+      {loading && <ChatMessage role="assistant" loading content="" />}
       {messages.length === 0 && (
         <div className="h-[400px] flex justify-center items-center flex-col gap-y-3">
           <motion.svg
@@ -38,9 +39,9 @@ export default function ChatBox({
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="lucide lucide-utensils-crossed-icon lucide-utensils-crossed size-32"
           >
             <motion.path
@@ -68,7 +69,7 @@ export default function ChatBox({
               d="m19 5-7 7"
             />
           </motion.svg>
-          <h1 className="text-5xl">뭐 먹고싶어?</h1>
+          <h1 className="text-5xl">오늘 뭐 먹지?</h1>
         </div>
       )}
       <div ref={anchoringRef}></div>
