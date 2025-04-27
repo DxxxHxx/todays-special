@@ -38,10 +38,7 @@ const useMap = () => {
 
     (async () => {
       const menuInfo = await fetchRecentlyMenu();
-      if (!menuInfo) {
-        alert("오류");
-        return (location.href = "/");
-      }
+
       // 내 위치
       const center: naver.maps.LatLng = new naver.maps.LatLng(lat!, lng!);
 
@@ -157,12 +154,14 @@ export const fetchRecentlyMenu = async () => {
     error: userErr,
   } = await supabase.auth.getUser();
   if (!user) {
-    console.log("로그인 필요");
+    alert("로그인 필요");
+    location.href = "/";
     return;
   }
   if (userErr) {
-    console.error("Error fetching latest record by user_id:", userErr);
-    return null;
+    alert(userErr.message);
+    location.href = "/";
+    return;
   }
 
   const { data, error } = await supabase
@@ -173,7 +172,8 @@ export const fetchRecentlyMenu = async () => {
     .limit(1); // 가장 최근 1개 레코드만 가져오기
 
   if (error || data?.length === 0) {
-    console.log("최근 추천 받은 음식이 없습니다.");
+    alert("최근 추천 받은 음식이 없습니다.");
+    location.href = "/";
     return;
   }
 

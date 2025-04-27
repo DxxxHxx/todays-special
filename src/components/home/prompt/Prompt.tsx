@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/hooks/useAuth";
 import { ArrowUp } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,18 +17,18 @@ export default function Prompt({
   requestRecommend: () => Promise<void>;
 }) {
   const navigate = useNavigate();
+  const user = useAuth();
   const handleNavigate = () => {
-    if (localStorage.getItem("menu")) {
-      navigate("/map", { state: { menu: localStorage.getItem("menu") } });
-      return;
-    } else {
-      alert("최근 추천받은 음식이 없습니다.");
+    if (!user) {
+      alert("로그인 후 이용 가능합니다..");
       return;
     }
+    navigate("/map");
   };
   return (
     <form onSubmit={handleSubmit} className="flex gap-2 pt-4 relative">
       <Textarea
+        placeholder="기분이나 날씨, 상황에 맞게 음식을 추천해드릴게요."
         className="w-full resize-none md:rounded-xl border p-5 h-[150px] shadow"
         value={input}
         onChange={(e) => setInput(e.target.value)}
