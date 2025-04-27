@@ -1,3 +1,7 @@
+import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
+import { toast } from "sonner";
+
 export default function ChatMessage({
   role,
   content,
@@ -8,6 +12,16 @@ export default function ChatMessage({
   loading?: boolean;
 }) {
   const isUser = role === "user";
+
+  const handleBookmarkTriggerClick = () => {
+    toast("즐겨찾기에 추가되었습니다.", {
+      description: new Date().toLocaleString(),
+      action: {
+        label: "닫기",
+        onClick: () => console.log("Undo"),
+      },
+    });
+  };
 
   return (
     <div
@@ -33,6 +47,12 @@ export default function ChatMessage({
         ></div>
       )}
       {isUser && <span className="text-2xl">👀</span>}
+      {!isUser && (
+        <Button className="save-button" onClick={handleBookmarkTriggerClick}>
+          <Star className="size-5" />
+          즐겨찾기
+        </Button>
+      )}
     </div>
   );
 }
