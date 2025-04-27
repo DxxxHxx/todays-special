@@ -17,15 +17,15 @@ export default function Header() {
   ];
 
   return (
-    <header className="m-auto border-b bg-secondary px-5 py-3 shadow-sm mb-10  rounded-4xl w-full md:max-w-2/3">
+    <header className="m-auto border-b bg-secondary px-5 py-3 shadow-sm mb-10  z-[999] rounded-4xl w-full md:max-w-2/3">
       <div className="mx-auto flex max-w-6xl items-center justify-between ">
         {/* 로고 */}
-        <Link to="/" className="text-lg font-bold text-blue-600">
+        <Link to="/" className="text-lg font-bold ">
           🍜 오늘 뭐 먹지?
         </Link>
 
         {/* 데스크탑 내비 */}
-        <nav className="hidden gap-4 md:flex ">
+        <nav className="hidden gap-4 lg:flex ">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -38,7 +38,7 @@ export default function Header() {
         </nav>
 
         {/* 로그인 상태 버튼 */}
-        <div className="hidden md:flex md:gap-x-3">
+        <div className="hidden lg:flex md:gap-x-3">
           <ToggleButton />
           {user ? (
             <Button variant="ghost" onClick={googleLogout}>
@@ -51,7 +51,7 @@ export default function Header() {
         </div>
 
         {/* 모바일 메뉴 */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <Sheet>
             <SheetTrigger asChild>
               <Button size="icon" variant="ghost">
