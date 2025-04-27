@@ -3,6 +3,7 @@ import axios from "axios";
 export async function getMenuRecommendation(prompt: string): Promise<{
   menu: string;
   reason: string;
+  content: string;
 }> {
   const systemPrompt = `
 당신은 사용자에게 기분과 상황에 맞는 음식 메뉴를 추천해주는 AI입니다.
@@ -49,5 +50,6 @@ export async function getMenuRecommendation(prompt: string): Promise<{
   return {
     menu: filteredMenu,
     reason,
+    content,
   };
 }
