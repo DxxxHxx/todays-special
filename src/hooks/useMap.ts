@@ -12,6 +12,7 @@ const useMap = () => {
   const { lat, lng } = useGeolocation();
   const [blogListPage, setBlogListPage] = useState(1);
   const [blogs, setBlogs] = useState<BlogListItem[]>([]);
+  const [menu, setMenu] = useState("");
 
   const handleBlogListPagination = {
     next: () => {
@@ -38,6 +39,10 @@ const useMap = () => {
 
     (async () => {
       const menuInfo = await fetchRecentlyMenu();
+
+      if (menuInfo?.menu) {
+        setMenu(menuInfo.menu);
+      }
 
       // 내 위치
       const center: naver.maps.LatLng = new naver.maps.LatLng(lat!, lng!);
@@ -92,9 +97,9 @@ const useMap = () => {
       map.setZoom(15);
       map.setOptions("disableKineticPan", false); //관성 드래깅 켜기
     })();
-  }, [lat, lng, blogListPage]);
+  }, [lat, lng, blogListPage, menu]);
 
-  return { ref, blogs, handleBlogListPagination, pageInfoObj };
+  return { ref, blogs, handleBlogListPagination, pageInfoObj, menu };
 };
 export default useMap;
 
