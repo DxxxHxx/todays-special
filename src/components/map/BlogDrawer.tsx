@@ -28,7 +28,7 @@ export default function BlogListDrawer({
 }) {
   return (
     <Drawer>
-      <DrawerTrigger className="absolute top-15 left-5">
+      <DrawerTrigger className="absolute top-5 left-5">
         <Button>맛집 더 보기</Button>
       </DrawerTrigger>
       <DrawerContent>
