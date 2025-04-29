@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Menu, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { googleLogout } from "@/utils/auth/googleAuth";
@@ -58,10 +63,16 @@ export default function Header() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col space-y-4 pt-10">
-              <Link to="/" className="text-lg font-bold text-blue-600">
-                🍜 오늘 뭐 먹지?
-              </Link>
+            <SheetContent
+              side="left"
+              className="flex flex-col space-y-4 pt-10  items-center"
+            >
+              <SheetTitle>
+                {" "}
+                <Link to="/" className="text-lg font-bold text-blue-600">
+                  🍜 오늘 뭐 먹지?
+                </Link>
+              </SheetTitle>
               <ToggleButton />
               {navItems.map((item) => (
                 <Link key={item.href} to={item.href} className="text-base">
@@ -70,10 +81,11 @@ export default function Header() {
               ))}
               {user ? (
                 <Button variant="ghost" onClick={googleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
                   로그아웃
                 </Button>
               ) : (
-                <Button variant="outline">로그인</Button>
+                <LoginButton />
               )}
             </SheetContent>
           </Sheet>

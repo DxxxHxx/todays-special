@@ -28,8 +28,8 @@ export default function Prompt({
   return (
     <form onSubmit={handleSubmit} className="flex gap-2 pt-4 relative">
       <Textarea
-        placeholder="기분이나 날씨, 상황에 맞게 음식을 추천해드릴게요."
-        className="w-full resize-none md:rounded-xl border p-5 h-[150px] shadow"
+        placeholder="기분이나 날씨, 재료 등 상황에 맞게 음식을 추천해드릴게요."
+        className="w-full resize-none md:rounded-xl border p-5 h-[150px] shadow-lg"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         rows={5}

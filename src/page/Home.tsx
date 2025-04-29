@@ -16,6 +16,8 @@ export default function Home() {
   const { saveRecommandation } = useSaveRecommandation();
 
   const requestRecommend = async () => {
+    if (!input) return;
+
     const userMsg: ChatMessage = { role: "user", content: input };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
@@ -24,7 +26,7 @@ export default function Home() {
     const { menu, reason, content } = await getMenuRecommendation(input);
     const aiMsg: ChatMessage = {
       role: "assistant",
-      content: menu ? `추천 메뉴 : ${menu}<br/>${reason ?? ""}` : content,
+      content: menu ? `추천 메뉴 : ${menu} <p>${reason ?? ""}</p>` : content,
     };
 
     if (menu) {
