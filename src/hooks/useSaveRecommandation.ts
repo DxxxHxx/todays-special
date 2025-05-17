@@ -1,6 +1,9 @@
+import useBookmarkInfoStore from "@/store/bookmark/bookmarkInfoStore";
 import supabase from "@/supabase/client";
 
 const useSaveRecommandation = () => {
+  const { setId, setIsBookmarked } = useBookmarkInfoStore();
+
   const saveRecommandation = async ({
     prompt,
     menu,
@@ -26,12 +29,18 @@ const useSaveRecommandation = () => {
     }
 
     // recommendation 테이블에 추가
-    const { error } = await supabase.from("recommendations").insert({
-      user_id: user.id,
-      prompt,
-      menu_name: menu,
-      description: desc,
-    });
+    const { error, data } = await supabase
+      .from("recommendations")
+      .insert({
+        user_id: user.id,
+        prompt,
+        menu_name: menu,
+        description: desc,
+      })
+      .select("*");
+
+    setId(data?.[0]?.id);
+    setIsBookmarked(data?.[0]?.is_bookmarked);
 
     if (error) {
       console.log(error.message);

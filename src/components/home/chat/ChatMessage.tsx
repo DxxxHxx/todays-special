@@ -11,6 +11,8 @@ export default function ChatMessage({
 }) {
   const isUser = role === "user";
 
+  const targetMenu = content.split("<p>")[0].replace("추천 메뉴 :", "").trim();
+
   return (
     <div
       className={`flex items-start gap-2 ${
@@ -35,9 +37,7 @@ export default function ChatMessage({
         ></div>
       )}
       {isUser && <span className="text-2xl">👀</span>}
-      {!isUser && content.includes("추천 메뉴 : ") && (
-        <BookMarkButton content={content} />
-      )}
+      {content.includes("추천 메뉴 : ") && <BookMarkButton menu={targetMenu} />}
     </div>
   );
 }

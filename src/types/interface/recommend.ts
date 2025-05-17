@@ -5,4 +5,5 @@ export interface RecommendHistory {
   menu_name: string;
   description: string;
   created_at: string;
+  is_bookmarked: boolean;
 }
