@@ -195,9 +195,10 @@
 }
 
 .save-button {
-  @apply mt-auto flex justify-center gap-x-1 bg-muted text-foreground;
+  @apply mt-auto flex justify-center gap-x-1 bg-muted text-foreground text-sm px-4;
 }
 .save-button:hover {
+  @apply scale-95 transition-all duration-200 bg-accent-foreground/50;
   svg {
     @apply fill-yellow-400 stroke-0;
   }

@@ -1,15 +1,14 @@
 import supabase from "@/supabase/client";
-import { useAuth } from "./useAuth";
 
-const useBookmarkMenu = (recommandId: string, isBookmarked: boolean) => {
-  const user = useAuth();
-  if (!user) {
-    alert("로그인 후 이용해주세요.");
-    return;
-  }
-
+const useBookmarkMenu = (recommandId: string) => {
   const handleBookmark = async () => {
-    console.log(`${isBookmarked}에서 ${!isBookmarked}로 변경돼야 함`);
+    const { data: recommendations } = await supabase
+      .from("recommendations")
+      .select("is_bookmarked")
+      .eq("id", recommandId);
+
+    const isBookmarked = recommendations?.[0]?.is_bookmarked;
+
     const { error } = await supabase
       .from("recommendations")
       .update({ is_bookmarked: !isBookmarked })
@@ -20,6 +19,9 @@ const useBookmarkMenu = (recommandId: string, isBookmarked: boolean) => {
       alert("요청에 실패 했습니다. 잠시 후 시도해주세요.");
       return;
     }
+
+    console.log(`${isBookmarked}에서 ${!isBookmarked}로 변경`);
+    return !isBookmarked as boolean;
   };
 
   return handleBookmark;
