@@ -2,6 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./page/Home";
 import RecommendMapPage from "./page/RecommendMapPage";
 import Layout from "./components/common/Layout";
+import HistoryPage from "./page/HistoryPage";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 export default function Router() {
   return (
@@ -9,7 +11,10 @@ export default function Router() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/map" element={<RecommendMapPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/map" element={<RecommendMapPage />} />
+            <Route path="/history" element={<HistoryPage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
