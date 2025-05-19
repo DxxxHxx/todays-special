@@ -18,7 +18,6 @@ export default function Header() {
   const navItems = [
     { label: "추천받기", href: "/" },
     { label: "추천 기록", href: "/history" },
-    { label: "즐겨찾기", href: "/favorites" },
   ];
 
   return (
