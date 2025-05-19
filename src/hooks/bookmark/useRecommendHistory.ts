@@ -1,20 +1,18 @@
 import { HistoryType } from "@/types/type/history";
-import { useEffect, useState } from "react";
-import { useAuth } from "../useAuth";
 import supabase from "@/supabase/client";
-import { RecommendHistory } from "@/types/interface/recommend";
+import { useOutletContext } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 const useRecommendHistory = (type: HistoryType) => {
-  const user = useAuth();
-  const [menus, setMenus] = useState<RecommendHistory[]>([]);
+  const { id }: { id: string } = useOutletContext();
 
-  useEffect(() => {
-    if (!user) return;
-    (async () => {
+  return useQuery({
+    queryKey: ["my-menu-history", type],
+    queryFn: async () => {
       let query = supabase
         .from("recommendations")
         .select("*")
-        .eq("user_id", user?.id);
+        .eq("user_id", id);
 
       if (type === "bookmarked") {
         query = query.eq("is_bookmarked", true);
@@ -26,11 +24,9 @@ const useRecommendHistory = (type: HistoryType) => {
         console.log(error.message);
         return;
       }
-      setMenus(menu);
-    })();
-  }, [user, type]);
-
-  return menus;
+      return menu;
+    },
+  });
 };
 
 export default useRecommendHistory;

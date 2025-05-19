@@ -12,6 +12,7 @@ import useRecommendHistory from "@/hooks/bookmark/useRecommendHistory";
 import useSearchParamsOption from "@/hooks/bookmark/useSearchParamsOption";
 import supabase from "@/supabase/client";
 import { RecommendHistory } from "@/types/interface/recommend";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Star } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,8 +20,9 @@ import { toast } from "sonner";
 export default function HistoryPage() {
   const { handleOptionChange, option } = useSearchParamsOption();
 
-  const menus = useRecommendHistory(option);
+  const { data: menus, isLoading } = useRecommendHistory(option);
 
+  if (isLoading) return <h1>loading...</h1>;
   return (
     <div className="max-w-2/3 m-auto">
       <div className="ml-auto w-[180px] mb-10">
@@ -38,7 +40,7 @@ export default function HistoryPage() {
         </Select>
       </div>
 
-      {menus.map((item) => (
+      {menus?.map((item) => (
         <div className="mb-5 flex items-center gap-x-5" key={item.id}>
           <h1>{item.menu_name}</h1>
           <BookmarkBtn {...item} />
@@ -55,14 +57,19 @@ const BookmarkBtn = ({
 }: Pick<RecommendHistory, "id" | "is_bookmarked" | "menu_name">) => {
   const [newBookmarkStatus, setNewBookmarkStatus] =
     useState<boolean>(is_bookmarked);
+
+  const bookmark = useBookmarkMumation(id, is_bookmarked);
   return (
     <Button
       onClick={async () => {
-        const newBookmarkStatus = await handleBookmark(id, is_bookmarked);
-        setNewBookmarkStatus(newBookmarkStatus!);
+        // const newBookmarkStatus = await handleBookmark(id, is_bookmarked);
+        const res = await bookmark.mutateAsync();
+
+        setNewBookmarkStatus(res);
+
         toast(
           `${menu_name}이(가) 즐겨찾기${
-            newBookmarkStatus ? "에 추가되었습니다." : "에서 삭제되었습니다."
+            newBookmarkStatus ? "에서 삭제되었습니다." : "에 추가되었습니다."
           }`,
           {
             description: new Date().toLocaleString(),
@@ -86,21 +93,30 @@ const BookmarkBtn = ({
   );
 };
 
-const handleBookmark = async (recommandId: string, isBookmarked: boolean) => {
-  const { error, data } = await supabase
-    .from("recommendations")
-    .update({ is_bookmarked: !isBookmarked })
-    .eq("id", recommandId)
-    .select();
+const useBookmarkMumation = (recommandId: string, isBookmarked: boolean) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      const { data } = await supabase
+        .from("recommendations")
+        .update({ is_bookmarked: !isBookmarked })
+        .eq("id", recommandId)
+        .order("created_at", { ascending: false })
+        .select("*");
 
-  console.log(data);
+      return data?.[0]?.is_bookmarked;
+    },
+    onSuccess: (isBookmarked) => {
+      queryClient.invalidateQueries({
+        queryKey: ["my-menu-history"],
+      });
 
-  if (error) {
-    console.log(error);
-    alert("요청에 실패 했습니다. 잠시 후 시도해주세요.");
-    return;
-  }
-
-  console.log(`${isBookmarked}에서 ${!isBookmarked}로 변경`);
-  return !isBookmarked as boolean;
+      return isBookmarked;
+    },
+    onError: (error) => {
+      toast.error("북마크 상태 변경에 실패했습니다.", {
+        description: error.message,
+      });
+    },
+  });
 };
