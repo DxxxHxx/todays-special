@@ -13,18 +13,18 @@ import { Button } from "../ui/button";
 
 export default function BlogListDrawer({
   BlogList,
-  handleBlogListPagination,
-  pageInfoObj,
-}: {
+}: // handleBlogListPagination,
+// pageInfoObj,
+{
   BlogList: BlogListItem[];
-  handleBlogListPagination: {
-    next: () => void;
-    prev: () => void;
-  };
-  pageInfoObj: {
-    maxPage: number;
-    currentPage: number;
-  };
+  // handleBlogListPagination: {
+  //   next: () => void;
+  //   prev: () => void;
+  // };
+  // pageInfoObj: {
+  //   maxPage: number;
+  //   currentPage: number;
+  // };
 }) {
   return (
     <Drawer>
@@ -33,10 +33,10 @@ export default function BlogListDrawer({
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="relative">
-          <DrawerTitle className="text-center text-2xl my-2">
+          <DrawerTitle className="my-2 text-2xl text-center">
             우리동네 맛집 관련 포스트
           </DrawerTitle>
-          <DrawerClose className="ml-auto absolute right-5">
+          <DrawerClose className="absolute ml-auto right-5">
             <X className="cursor-pointer" />
           </DrawerClose>
         </DrawerHeader>
@@ -49,7 +49,7 @@ export default function BlogListDrawer({
               <a
                 href={blog.link}
                 target="_blank"
-                className="flex justify-start p-4 items-center gap-x-3 "
+                className="flex items-center justify-start p-4 gap-x-3 "
               >
                 <UtensilsCrossed />
                 <h1 dangerouslySetInnerHTML={{ __html: blog.title }}></h1>
@@ -57,10 +57,10 @@ export default function BlogListDrawer({
             </li>
           ))}
         </ul>
-        <DrawerFooter>
-          <div className=" m-auto md:m-0 flex items-center gap-x-2">
+        {/* <DrawerFooter>
+          <div className="flex items-center m-auto md:m-0 gap-x-2">
             <Button
-              className="hover:bg-muted-foreground bg-accent-foreground  "
+              className="hover:bg-muted-foreground bg-accent-foreground "
               disabled={pageInfoObj.currentPage === 1}
               onClick={() => handleBlogListPagination.prev()}
             >
@@ -70,14 +70,14 @@ export default function BlogListDrawer({
               {pageInfoObj.currentPage} / {pageInfoObj.maxPage}
             </span>
             <Button
-              className="hover:bg-muted-foreground bg-accent-foreground  "
+              className="hover:bg-muted-foreground bg-accent-foreground "
               disabled={pageInfoObj.currentPage === pageInfoObj.maxPage}
               onClick={() => handleBlogListPagination.next()}
             >
               <ChevronRight className="size-7 " />
             </Button>
           </div>
-        </DrawerFooter>
+        </DrawerFooter> */}
       </DrawerContent>
     </Drawer>
   );
