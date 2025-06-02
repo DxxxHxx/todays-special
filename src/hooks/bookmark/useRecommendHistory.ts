@@ -26,6 +26,8 @@ const useRecommendHistory = (type: HistoryType) => {
       }
       return menu;
     },
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 
