@@ -54,8 +54,8 @@ export default function Home() {
         <Prompt
           handleSubmit={handleSubmit}
           input={input}
-          setInput={setInput}
           requestRecommend={requestRecommend}
+          handleInputChange={(input: string) => setInput(input)}
         />
       </div>
     </div>
