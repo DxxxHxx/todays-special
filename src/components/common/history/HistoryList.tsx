@@ -12,11 +12,11 @@ import useRecommendHistory from "@/hooks/bookmark/useRecommendHistory";
 import supabase from "@/supabase/client";
 import { RecommendHistory } from "@/types/interface/recommend";
 import { HistoryType } from "@/types/type/history";
+import triggerToast from "@/utils/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Star } from "lucide-react";
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { toast } from "sonner";
 
 const tableHeadList = [
   { id: 1, text: "메뉴 명" },
@@ -92,17 +92,10 @@ const BookmarkBtn = ({
 
         setNewBookmarkStatus(res);
 
-        toast(
+        triggerToast(
           `${menu_name}이(가) 즐겨찾기${
             newBookmarkStatus ? "에서 삭제되었습니다." : "에 추가되었습니다."
-          }`,
-          {
-            description: new Date().toLocaleString(),
-            action: {
-              label: "닫기",
-              onClick: () => console.log("Undo"),
-            },
-          }
+          }`
         );
       }}
       variant={"outline"}
@@ -148,10 +141,8 @@ const useBookmarkMumation = (recommandId: string, isBookmarked: boolean) => {
 
       return isBookmarked;
     },
-    onError: (error) => {
-      toast.error("북마크 상태 변경에 실패했습니다.", {
-        description: error.message,
-      });
+    onError: () => {
+      triggerToast("북마크 상태 변경에 실패했습니다.");
     },
   });
 };

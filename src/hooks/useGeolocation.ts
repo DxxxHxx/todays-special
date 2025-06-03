@@ -1,5 +1,5 @@
+import triggerToast from "@/utils/toast";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 interface GeolocationPosition {
   lat: number | null;
@@ -27,12 +27,7 @@ const useGeolocation = () => {
       },
       (error) => {
         console.error(error);
-        toast("위치 정보를 가져오는데 실패했습니다.", {
-          action: {
-            label: "refresh",
-            onClick: () => location.reload(),
-          },
-        });
+        triggerToast("위치 정보를 가져오는데 실패했습니다.");
       }
     );
   }, []);

@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import useBookmarkMenu from "@/hooks/useBookmarkMenu";
 import useBookmarkInfoStore from "@/store/bookmark/bookmarkInfoStore";
+import triggerToast from "@/utils/toast";
 import { Star } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 
 export default function BookMarkButton({ menu }: { menu: string }) {
   const { id } = useBookmarkInfoStore();
@@ -21,17 +21,10 @@ export default function BookMarkButton({ menu }: { menu: string }) {
       const isBookmarked: boolean = (await bookmark()) ?? false;
       setIsBookmarked(isBookmarked);
 
-      toast(
+      triggerToast(
         `${menu}이(가) 즐겨찾기${
           isBookmarked ? "에 추가되었습니다." : "에서 삭제되었습니다."
-        }`,
-        {
-          description: new Date().toLocaleString(),
-          action: {
-            label: "닫기",
-            onClick: () => console.log("Undo"),
-          },
-        }
+        }`
       );
     } catch (e) {
       alert(e);

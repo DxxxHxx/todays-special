@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import triggerToast from "@/utils/toast";
 
 export default function SearchRestaurantDialog() {
   const [menu, setMenu] = useState("");
@@ -19,7 +20,7 @@ export default function SearchRestaurantDialog() {
 
   useEffect(() => {
     if (!user && isOpen) {
-      alert("login first");
+      triggerToast("로그인 후 시도해주세요.");
       setIsOpen(false);
     }
   }, [user, isOpen]);
