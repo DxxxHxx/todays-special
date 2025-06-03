@@ -195,11 +195,14 @@
 }
 
 .save-button {
-  @apply mt-auto flex justify-center gap-x-1 bg-muted text-foreground text-sm px-4;
+  @apply mt-auto flex justify-center gap-x-1 bg-muted text-foreground text-xs px-4;
 }
 .save-button:hover {
   @apply scale-95 transition-all duration-200 bg-accent-foreground/50;
-  svg {
+  /* svg {
     @apply fill-yellow-400 stroke-0;
-  }
+  } */
+}
+.table-col {
+  @apply w-1/4  line-clamp-1 flex justify-center items-center;
 }

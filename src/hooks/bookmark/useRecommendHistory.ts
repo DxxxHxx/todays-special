@@ -2,6 +2,7 @@ import { HistoryType } from "@/types/type/history";
 import supabase from "@/supabase/client";
 import { useOutletContext } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { RecommendHistory } from "@/types/interface/recommend";
 
 const useRecommendHistory = (type: HistoryType) => {
   const { id }: { id: string } = useOutletContext();
@@ -12,7 +13,8 @@ const useRecommendHistory = (type: HistoryType) => {
       let query = supabase
         .from("recommendations")
         .select("*")
-        .eq("user_id", id);
+        .eq("user_id", id)
+        .order("created_at", { ascending: false });
 
       if (type === "bookmarked") {
         query = query.eq("is_bookmarked", true);
@@ -24,7 +26,7 @@ const useRecommendHistory = (type: HistoryType) => {
         console.log(error.message);
         return;
       }
-      return menu;
+      return menu as RecommendHistory[];
     },
     staleTime: 0,
     gcTime: 0,
