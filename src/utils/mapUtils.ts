@@ -1,15 +1,18 @@
 import { searchBlog, searchplace } from "@/service/mapApi";
 import { MarkerType } from "@/types/type/map";
 
+interface PostionResults {
+  lng: string;
+  lat: string;
+  index: number;
+}
 export const formatPlaces = ({
   myCenter,
   menu,
-  // setPlaces,
   map,
 }: {
   myCenter: naver.maps.LatLng;
   menu: string;
-  // setPlaces: (places: PlaceListItem[]) => void;
   map: naver.maps.Map;
 }) => {
   naver.maps.Service.reverseGeocode(
@@ -46,7 +49,9 @@ export const formatPlaces = ({
         });
       });
 
-      const positionResults = await Promise.all(geocodePromises);
+      const positionResults = (await Promise.all(
+        geocodePromises
+      )) as PostionResults[];
 
       // places에 위치 정보 추가
       const placesWithPosition = places.map((place, i) => ({
@@ -65,7 +70,13 @@ export const formatPlaces = ({
           Number(place?.pos?.lat),
           Number(place?.pos?.lng)
         );
-        const marker = new naver.maps.Marker({ position, map });
+        const marker = new naver.maps.Marker({
+          position,
+          map,
+          icon: {
+            content: `<img class='w-11 relative right-[21px] ' src=${`https://cdn4.iconfinder.com/data/icons/map-pins-2/256/21-512.png`} />`,
+          },
+        });
         const infoWindow = new naver.maps.InfoWindow({
           content: `
             <div class='text-black p-5 rounded-xl'>
@@ -90,7 +101,7 @@ export const formatPlaces = ({
         updateMarkers(map, markers);
       });
 
-      function updateMarkers(map, markers: MarkerType[]) {
+      function updateMarkers(map: any, markers: MarkerType[]) {
         const mapBounds = map.getBounds();
         let marker, position;
 
@@ -106,12 +117,12 @@ export const formatPlaces = ({
         }
       }
 
-      function showMarker(map, marker) {
+      function showMarker(map: naver.maps.Map, marker: any) {
         if (marker.setMap()) return;
         marker.setMap(map);
       }
 
-      function hideMarker(marker) {
+      function hideMarker(marker: any) {
         if (!marker.setMap()) return;
         marker.setMap(null);
       }

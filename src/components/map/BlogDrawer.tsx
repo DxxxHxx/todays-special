@@ -2,13 +2,12 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { BlogListItem } from "@/types/interface/map/blogList";
-import { ChevronLeft, ChevronRight, UtensilsCrossed, X } from "lucide-react";
+import { UtensilsCrossed, X } from "lucide-react";
 import { Button } from "../ui/button";
 
 export default function BlogListDrawer({
