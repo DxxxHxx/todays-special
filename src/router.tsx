@@ -1,7 +1,10 @@
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./page/Home";
-import Header from "./components/header/Header";
 import RecommendMapPage from "./page/RecommendMapPage";
+import Layout from "./components/common/Layout";
+import HistoryPage from "./page/HistoryPage";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import MyPage from "./page/MyPage";
 
 export default function Router() {
   return (
@@ -9,21 +12,13 @@ export default function Router() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/map" element={<RecommendMapPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/map" element={<RecommendMapPage />} />
+            <Route path="/history" element={<HistoryPage />} />
+            <Route path="/myPage" element={<MyPage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
-
-const Layout = () => {
-  return (
-    <div className="p-6">
-      {/* <ToggleButton /> */}
-      <Header />
-      <main>
-        <Outlet />
-      </main>
-    </div>
-  );
-};

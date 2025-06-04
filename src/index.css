@@ -1,9 +1,15 @@
+@font-face {
+  font-family: jua;
+  src: url("./assets/fonts/Jua-Regular.ttf");
+}
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-jua: jua, "sans-serif";
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -184,6 +190,19 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-jua;
   }
+}
+
+.save-button {
+  @apply mt-auto flex justify-center gap-x-1 bg-muted text-foreground text-xs px-4;
+}
+.save-button:hover {
+  @apply scale-95 transition-all duration-200 bg-accent-foreground/50;
+  /* svg {
+    @apply fill-yellow-400 stroke-0;
+  } */
+}
+.table-col {
+  @apply w-1/4  line-clamp-1 flex justify-center items-center;
 }

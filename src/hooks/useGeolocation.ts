@@ -1,34 +1,38 @@
+import triggerToast from "@/utils/toast";
 import { useEffect, useState } from "react";
 
+interface GeolocationPosition {
+  lat: number | null;
+  lng: number | null;
+}
+
 const useGeolocation = () => {
-  const [position, setPosition] = useState<GeolocationPosition | null>(null);
-  const [error, setError] = useState<GeolocationPositionError | null>(null);
+  const [position, setPosition] = useState<GeolocationPosition>({
+    lat: null,
+    lng: null,
+  });
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      alert("위치 정보 권한을 허용해주세요.");
+      alert("이 브라우저에서는 위치 정보를 사용할 수 없습니다.");
       return;
     }
 
-    const watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        setPosition(pos);
-        setError(null);
+    navigator.geolocation.getCurrentPosition(
+      (success) => {
+        setPosition({
+          lat: success.coords.latitude,
+          lng: success.coords.longitude,
+        });
       },
-      (err) => {
-        setError(err);
+      (error) => {
+        console.error(error);
+        triggerToast("위치 정보를 가져오는데 실패했습니다.");
       }
     );
-
-    return () => {
-      navigator.geolocation.clearWatch(watchId);
-    };
   }, []);
 
-  return {
-    lat: position?.coords.latitude,
-    lng: position?.coords.longitude,
-    error,
-  };
+  return position;
 };
+
 export default useGeolocation;
