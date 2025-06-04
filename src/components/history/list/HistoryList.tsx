@@ -15,8 +15,10 @@ import { HistoryType } from "@/types/type/history";
 import triggerToast from "@/utils/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Star } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { usePageIndexStore } from "@/store/history/usePageIndexStore";
+import PaginationButtons from "./PaginationButtons";
 
 const tableHeadList = [
   { id: 1, text: "메뉴 명" },
@@ -25,17 +27,34 @@ const tableHeadList = [
   { id: 4, text: "주변 식당 찾기" },
 ];
 
+export const PAGE_SIZE = 5;
 export default function HistoryList() {
   const [searchParams] = useSearchParams();
   const status = searchParams.get("status") as HistoryType;
-  const { data: menus, isLoading } = useRecommendHistory(status);
+  const queryClient = useQueryClient();
+  const { pageIndex, handleNextPage, handlePrevPage } = usePageIndexStore();
+  const {
+    data: menus,
+    isLoading,
+    pages,
+  } = useRecommendHistory(status, pageIndex);
   const listTitle = status === "all" ? "최근 추천 기록" : "즐겨찾기 목록";
 
-  // console.log(menus);
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["my-menu-history"] });
+  }, [pageIndex, queryClient]);
+
+  useEffect(() => {
+    if (menus?.length === 0) {
+      handlePrevPage();
+      return;
+    }
+  }, [menus, handlePrevPage]);
+
   if (isLoading) return <h1>loading...</h1>;
   return (
     <>
-      <h1 className="text-center text-xl mb-10">{listTitle}</h1>
+      <h1 className="mb-10 text-xl text-center">{listTitle}</h1>
       <Table className="w-full">
         <TableCaption>{listTitle}</TableCaption>
         <TableHeader>
@@ -50,7 +69,7 @@ export default function HistoryList() {
 
         <TableBody>
           {menus?.length === 0 || menus === undefined ? (
-            <h1 className="text-center my-5">결과 없음</h1>
+            <h1 className="my-5 text-center">결과 없음</h1>
           ) : (
             <>
               {menus?.map((menu) => (
@@ -71,9 +90,24 @@ export default function HistoryList() {
           )}
         </TableBody>
       </Table>
+
+      <PaginationButtons
+        pages={pages}
+        paginationHandler={{
+          next: handleNextPage,
+          prev: handlePrevPage,
+        }}
+      />
     </>
   );
 }
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 const BookmarkBtn = ({
   id,
@@ -135,9 +169,11 @@ const useBookmarkMumation = (recommandId: string, isBookmarked: boolean) => {
       return data?.[0]?.is_bookmarked;
     },
     onSuccess: (isBookmarked) => {
-      queryClient.invalidateQueries({
-        queryKey: ["my-menu-history"],
-      });
+      ["my-menu-history", "hitory-max-page"].forEach((queryKey) =>
+        queryClient.invalidateQueries({
+          queryKey: [queryKey],
+        })
+      );
 
       return isBookmarked;
     },

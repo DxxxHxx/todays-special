@@ -1,9 +1,9 @@
-import HistoryList from "@/components/common/history/HistoryList";
-import StatusFilter from "@/components/common/history/StatusFilter";
+import HistoryList from "@/components/history/list/HistoryList";
+import StatusFilter from "@/components/history/StatusFilter";
 
 export default function HistoryPage() {
   return (
-    <div className="m-auto w-full md:max-w-2/3">
+    <div className="w-full m-auto md:max-w-2/3">
       <StatusFilter />
       <HistoryList />
     </div>
