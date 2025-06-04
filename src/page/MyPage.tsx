@@ -2,11 +2,11 @@ import { Tabs } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { User } from "@supabase/supabase-js";
 import UserProfile from "@/components/myPage/UserProfile";
 import AccountSetting from "@/components/myPage/AccountSetting";
 import { MyPageTabType } from "@/types/type/myPage";
 import MyPageTabList from "@/components/myPage/MyPageTabList";
+import { User } from "@/types/interface/user";
 
 export default function MyPage() {
   const [tab, setTab] = useState<MyPageTabType>("profile");
@@ -23,7 +23,7 @@ export default function MyPage() {
           handleTab={(tab: MyPageTabType) => setTab(tab)}
         />
         <TabsContent value="profile">
-          <UserProfile />
+          <UserProfile user={user} />
         </TabsContent>
         <TabsContent value="account">
           <AccountSetting user={user} />

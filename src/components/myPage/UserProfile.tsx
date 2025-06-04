@@ -11,8 +11,13 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { User } from "@/types/interface/user";
+import triggerToast from "@/utils/toast";
 
-export default function UserProfile() {
+export default function UserProfile({ user }: { user: User }) {
+  const updateUser = async () => {
+    triggerToast("개발 예정");
+  };
   return (
     <div className="grid gap-6">
       <Card>
@@ -35,11 +40,14 @@ export default function UserProfile() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">이름</Label>
-                  <Input id="name" defaultValue="김민수" />
+                  <Input id="name" defaultValue={user?.user_metadata?.name} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="username">사용자 이름</Label>
-                  <Input id="username" defaultValue="minsu_kim" />
+                  <Input
+                    id="username"
+                    defaultValue={user?.user_metadata?.user_name}
+                  />
                 </div>
               </div>
               <div className="space-y-2">
@@ -47,7 +55,7 @@ export default function UserProfile() {
                 <Input
                   id="email"
                   type="email"
-                  defaultValue="minsu.kim@example.com"
+                  defaultValue={user.user_metadata.email}
                 />
               </div>
               <div className="space-y-2">
@@ -55,14 +63,16 @@ export default function UserProfile() {
                 <Textarea
                   id="bio"
                   placeholder="자기소개를 입력하세요"
-                  defaultValue="안녕하세요! 저는 디자인과 개발에 관심이 많은 김민수입니다."
+                  defaultValue=""
                 />
               </div>
             </div>
           </div>
         </CardContent>
         <CardFooter className="flex justify-center md:justify-end">
-          <Button className="w-full md:w-fit">저장하기</Button>
+          <Button onClick={updateUser} className="w-full md:w-fit">
+            저장하기
+          </Button>
         </CardFooter>
       </Card>
     </div>
