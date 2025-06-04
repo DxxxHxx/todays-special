@@ -4,6 +4,7 @@ import RecommendMapPage from "./page/RecommendMapPage";
 import Layout from "./components/common/Layout";
 import HistoryPage from "./page/HistoryPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import MyPage from "./page/MyPage";
 
 export default function Router() {
   return (
@@ -14,6 +15,7 @@ export default function Router() {
           <Route element={<ProtectedRoute />}>
             <Route path="/map" element={<RecommendMapPage />} />
             <Route path="/history" element={<HistoryPage />} />
+            <Route path="/myPage" element={<MyPage />} />
           </Route>
         </Route>
       </Routes>
