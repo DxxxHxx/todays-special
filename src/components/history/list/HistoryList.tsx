@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { usePageIndexStore } from "@/store/history/usePageIndexStore";
 import PaginationButtons from "./PaginationButtons";
+import HistoryListSkeleton from "@/components/skeleton/HistoryListSkeleton";
 
 const tableHeadList = [
   { id: 1, text: "메뉴 명" },
@@ -51,11 +52,10 @@ export default function HistoryList() {
     }
   }, [menus, handlePrevPage]);
 
-  if (isLoading) return <h1>loading...</h1>;
+  if (isLoading) return <HistoryListSkeleton />;
   return (
     <>
-      <h1 className="mb-10 text-xl text-center">{listTitle}</h1>
-      <Table className="w-full">
+      <Table className="w-full h-[321px]">
         <TableCaption>{listTitle}</TableCaption>
         <TableHeader>
           <TableRow className="flex justify-between">
