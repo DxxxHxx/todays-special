@@ -12,7 +12,9 @@ const useMap = () => {
 
   useEffect(() => {
     (async () => {
-      if (!ref.current) return;
+      if (!ref.current || Object.values(pos).some((item) => item === null)) {
+        return;
+      }
       if (!menu) {
         alert("메뉴가 없습니다.");
         return (location.pathname = "/");

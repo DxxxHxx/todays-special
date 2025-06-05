@@ -1,4 +1,3 @@
-import triggerToast from "@/utils/toast";
 import { useEffect, useState } from "react";
 
 interface GeolocationPosition {
@@ -25,9 +24,13 @@ const useGeolocation = () => {
           lng: success.coords.longitude,
         });
       },
-      (error) => {
-        console.error(error);
-        triggerToast("위치 정보를 가져오는데 실패했습니다.");
+      async (error) => {
+        if (error.code === error.PERMISSION_DENIED) {
+          setPosition({
+            lat: 37.5666805,
+            lng: 126.9784147,
+          });
+        }
       }
     );
   }, []);
