@@ -30,7 +30,7 @@ export const formatPlaces = ({
       const places = await searchplace(searchQuery);
 
       // Promise.all을 사용해서 모든 geocode 완료를 기다림
-      const geocodePromises = places.map((place, i) => {
+      const geocodePromises = places?.map((place, i) => {
         return new Promise((resolve) => {
           naver.maps.Service.geocode(
             {
