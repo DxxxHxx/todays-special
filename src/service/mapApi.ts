@@ -15,9 +15,13 @@ export const searchplace = async (query: string) => {
           .VITE_NAVER_SEARCH_CLIENT_SECRET,
       },
     })
-  ).data.items;
+  ).data;
 
-  return res;
+  console.log("searchPlaces 내부 , res ", res);
+
+  console.log("searchPlaces 내부 , res.items", res.items);
+
+  return res.items;
 };
 
 export const searchBlog = async (query: string) => {
