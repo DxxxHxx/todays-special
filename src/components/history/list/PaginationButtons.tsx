@@ -21,6 +21,7 @@ export default function PaginationButtons({
   return (
     <div className="flex items-center justify-center mt-3 gap-x-5 md:justify-end">
       <Button
+        aria-label="navigate previous page"
         className="w-1/3 md:w-1/7"
         disabled={pages.currentPage === 1}
         onClick={paginationHandler.prev}
@@ -31,6 +32,7 @@ export default function PaginationButtons({
         {pages.currentPage} / {pages.totalPage}
       </span>
       <Button
+        aria-label="navigate next page"
         disabled={pages.currentPage === pages.totalPage}
         className="w-1/3 md:w-1/7"
         onClick={paginationHandler.next}

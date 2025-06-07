@@ -14,7 +14,7 @@ export default function StatusFilter() {
   return (
     <div className="ml-auto w-[180px] mb-10">
       <Select onValueChange={handleOptionChange} value={option}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger aria-label="select" className="w-full">
           <SelectValue placeholder="-- 전체 or 북마크 --" />
         </SelectTrigger>
         <SelectContent>
