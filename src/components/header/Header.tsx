@@ -58,7 +58,11 @@ export default function Header() {
         <div className="lg:hidden">
           <Sheet>
             <SheetTrigger asChild>
-              <Button size="icon" variant="ghost">
+              <Button
+                size="icon"
+                variant="ghost"
+                aria-label="mobile menu button"
+              >
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>

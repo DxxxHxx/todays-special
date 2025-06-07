@@ -35,7 +35,10 @@ export default function Prompt({
       />
       <div className="absolute bottom-[10px] right-[10px] md:bottom-[20px] md:right-[20px] flex justify-center items-center gap-x-3">
         <SearchRestaurantDialog />
-        <button className="border  p-2 rounded-full bg-foreground text-secondary cursor-pointer hover:bg-muted-foreground transition-colors duration-200">
+        <button
+          aria-label="submit button"
+          className="border  p-2 rounded-full bg-foreground text-secondary cursor-pointer hover:bg-muted-foreground transition-colors duration-200"
+        >
           <ArrowUp />
         </button>
       </div>

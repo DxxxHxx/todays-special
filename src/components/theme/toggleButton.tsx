@@ -10,17 +10,26 @@ export default function ToggleButton() {
   };
   return (
     <div className="flex items-center space-x-2 ">
-      <label htmlFor="theme" className="cursor-pointer">
+      <label
+        aria-label="to light mode"
+        htmlFor="theme"
+        className="cursor-pointer"
+      >
         <Sun />
       </label>
       <Switch
+        aria-label="toggle theme button"
         onClick={handleThemeToggle}
         id="theme"
         className="cursor-pointer"
         aria-checked={theme === "dark" ? "true" : "false"}
         checked={theme === "dark"}
       />
-      <label htmlFor="theme" className="cursor-pointer">
+      <label
+        aria-label="to dark mode"
+        htmlFor="theme"
+        className="cursor-pointer"
+      >
         <Moon />
       </label>
     </div>
