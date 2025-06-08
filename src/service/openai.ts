@@ -1,15 +1,16 @@
+import { ChatResponse } from "@/types/interface/chatResponse";
+import { getUser } from "@/utils/auth/googleAuth";
 import axios from "axios";
 
-export async function getMenuRecommendation(prompt: string): Promise<{
-  menu: string;
-  reason: string;
-  content: string;
-}> {
+export async function getMenuRecommendation(
+  prompt: string
+): Promise<ChatResponse> {
   const systemPrompt = `
 당신은 사용자에게 기분과 상황에 맞는 음식 메뉴를 추천해주는 AI입니다.
 반드시 아래 형식을 따라 답변하세요:
 
 추천메뉴: [추천할 음식 이름]
+<br/>
 이유: [간단한 추천 이유]
 
 예시:
@@ -37,19 +38,19 @@ export async function getMenuRecommendation(prompt: string): Promise<{
 
   // 예시 응답 파싱
   const content: string = data.choices?.[0]?.message?.content || "";
-  // const [menu, ...rest] = content.split("\n").filter(Boolean);
-  console.log(`content : ${content}`);
-  // console.log(menu, rest);
-  // const reason = rest.join(" ").replace(/^[-:\s]+/, "");
 
   const [menu, reason] = content.split("<br/>");
   const filteredMenu =
     menu.split("추천메뉴:").length > 1 ? menu.split("추천메뉴:")[1] : "";
 
-  console.log(filteredMenu);
-  return {
+  const user = await getUser();
+  const res = {
     menu: filteredMenu,
-    reason,
+    reason: reason ?? "",
     content,
+    user: user?.user_metadata.name ?? "익명",
+    hasMenu: !!filteredMenu, // 메뉴 추천 메세지면 true, 일반 대화형이면 false
   };
+
+  return res;
 }

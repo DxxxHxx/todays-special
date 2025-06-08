@@ -4,10 +4,13 @@ import useSaveRecommandation from "@/hooks/useSaveRecommandation";
 import ChatMessage from "@/components/home/chat/ChatMessage";
 import Prompt from "@/components/home/prompt/Prompt";
 import ChatBox from "@/components/home/chat/ChatBox";
+import { formatAiChatResponse } from "@/utils/\bformatAiChatResponse";
 
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
+  hasMenu: boolean;
+  menu?: string;
 }
 export default function Home() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -18,21 +21,28 @@ export default function Home() {
   const requestRecommend = async () => {
     if (!input) return;
 
-    const userMsg: ChatMessage = { role: "user", content: input };
+    const userMsg: ChatMessage = {
+      role: "user",
+      content: input,
+      hasMenu: false,
+    };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
 
-    const { menu, reason, content } = await getMenuRecommendation(input);
+    const chatResponse = await getMenuRecommendation(input);
+
     const aiMsg: ChatMessage = {
       role: "assistant",
-      content: menu ? `추천 메뉴 : ${menu} <p>${reason ?? ""}</p>` : content,
+      content: formatAiChatResponse(chatResponse),
+      hasMenu: chatResponse.hasMenu,
+      menu: chatResponse.hasMenu ? chatResponse.menu : "",
     };
 
-    if (menu) {
+    if (chatResponse.hasMenu) {
       await saveRecommandation({
-        menu,
-        desc: reason,
+        menu: chatResponse.menu,
+        desc: chatResponse.reason,
         prompt: input,
       });
     }
