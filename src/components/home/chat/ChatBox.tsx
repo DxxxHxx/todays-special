@@ -27,9 +27,14 @@ export default function ChatBox({
   return (
     <div className="space-y-2 relative px-5 md:px-0 overflow-y-auto max-h-[400px] flex flex-col ">
       {messages.map((msg, idx) => (
-        <ChatMessage key={idx} role={msg.role} content={msg.content} />
+        <ChatMessage key={idx} msg={msg} />
       ))}
-      {loading && <ChatMessage role="assistant" loading content="" />}
+      {loading && (
+        <ChatMessage
+          msg={{ role: "assistant", content: "", hasMenu: false }}
+          loading
+        />
+      )}
       {messages.length === 0 && <MainLogo />}
       <div ref={anchoringRef}></div>
     </div>

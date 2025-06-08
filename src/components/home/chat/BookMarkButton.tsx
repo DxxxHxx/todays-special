@@ -15,7 +15,7 @@ export default function BookMarkButton({ menu }: { menu: string }) {
 
   const handleBookmarkTriggerClick = async () => {
     if (!user) {
-      return alert("로그인 후 이용 가능합니다.");
+      return triggerToast("로그인 후 이용가능합니다.");
     }
     try {
       const isBookmarked: boolean = (await bookmark()) ?? false;

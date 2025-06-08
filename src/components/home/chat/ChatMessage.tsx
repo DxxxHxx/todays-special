@@ -1,17 +1,14 @@
+import { ChatMessage as ChatMsgType } from "@/page/Home";
 import BookMarkButton from "./BookMarkButton";
 
 export default function ChatMessage({
-  role,
-  content,
+  msg,
   loading = false,
 }: {
-  role: "user" | "assistant";
-  content: string;
+  msg: ChatMsgType;
   loading?: boolean;
 }) {
-  const isUser = role === "user";
-
-  const targetMenu = content.split("<p>")[0].replace("추천 메뉴 :", "").trim();
+  const isUser = msg.role === "user";
 
   return (
     <div
@@ -33,11 +30,11 @@ export default function ChatMessage({
           className={`max-w-xs rounded-lg px-4 py-2 text-sm shadow text-pretty ${
             isUser ? "bg-blue-600 text-white" : "bg-muted text-foreground"
           }`}
-          dangerouslySetInnerHTML={{ __html: content }}
+          dangerouslySetInnerHTML={{ __html: msg.content }}
         ></div>
       )}
       {isUser && <span className="text-2xl">👀</span>}
-      {content.includes("추천 메뉴 : ") && <BookMarkButton menu={targetMenu} />}
+      {msg.hasMenu && <BookMarkButton menu={msg.menu!} />}
     </div>
   );
 }
