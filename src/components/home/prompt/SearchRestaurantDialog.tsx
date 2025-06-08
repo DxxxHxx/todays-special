@@ -37,6 +37,7 @@ export default function SearchRestaurantDialog() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            if (!menu) return;
             navigate(`/map?menu=${menu}`);
           }}
           className="flex flex-col gap-y-5"

@@ -70,8 +70,10 @@ React + Supabase + OpenAI + Naver Map API 기반으로 구현된 실사용 가�
 
 ## 🧪 트러블슈팅 & 개선 사항
 
-- Supabase RLS를 활용한 사용자별 데이터 접근 제어
-- Geolocation + Naver API 연동 시 CORS 및 위치 정확도 이슈 해결
+- form 트리거 이벤트 한글 중복 문제 해결
+- 배포 환경에서 네이버 API 프록시 문제 해결
+- 페이지네이션 히스토리 관리
+- 모달 컴포넌트 포커스트랩으로 접근성 개선
 - OpenAI 응답 불확실성 대응 → 프롬프트 템플릿 구조화
 
 <br />
