@@ -1,13 +1,7 @@
 import { ChatMessage as ChatMsgType } from "@/page/Home";
 import BookMarkButton from "./BookMarkButton";
 
-export default function ChatMessage({
-  msg,
-  loading = false,
-}: {
-  msg: ChatMsgType;
-  loading?: boolean;
-}) {
+export default function ChatMessage({ msg }: { msg: ChatMsgType }) {
   const isUser = msg.role === "user";
 
   return (
@@ -17,22 +11,12 @@ export default function ChatMessage({
       }`}
     >
       {!isUser && <span className="text-2xl">😋</span>}
-      {loading ? (
-        <div className="flex items-center justify-center p-5 ">
-          <div className="flex space-x-2 animate-pulse">
-            <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-            <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-            <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-          </div>
-        </div>
-      ) : (
-        <div
-          className={`max-w-xs rounded-lg px-4 py-2 text-sm shadow text-pretty ${
-            isUser ? "bg-blue-600 text-white" : "bg-muted text-foreground"
-          }`}
-          dangerouslySetInnerHTML={{ __html: msg.content }}
-        ></div>
-      )}
+      <div
+        className={`max-w-xs rounded-lg px-4 py-2 text-sm shadow text-pretty ${
+          isUser ? "bg-blue-600 text-white" : "bg-muted text-foreground"
+        }`}
+        dangerouslySetInnerHTML={{ __html: msg.content }}
+      ></div>
       {isUser && <span className="text-2xl">👀</span>}
       {msg.hasMenu && <BookMarkButton menu={msg.menu!} />}
     </div>
