@@ -13,10 +13,35 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { User } from "@/types/interface/user";
 import triggerToast from "@/utils/toast";
+import supabase from "@/supabase/client";
+import { useRef } from "react";
 
 export default function UserProfile({ user }: { user: User }) {
-  const updateUser = async () => {
-    triggerToast("개발 예정");
+  const {
+    user_metadata: { email, name, user_name },
+  } = user;
+  const userNameRef = useRef<HTMLInputElement>(null);
+
+  const updateUserName = async () => {
+    if (!userNameRef.current) return;
+
+    if (!userNameRef.current.value) {
+      return triggerToast("이름을 입력해주세요.");
+    }
+    try {
+      const { data } = await supabase.auth.updateUser({
+        data: {
+          user_name: userNameRef.current.value,
+        },
+      });
+      console.log(data);
+      triggerToast("수정이 완료되었습니다.");
+    } catch {
+      return triggerToast(`수정 실패`, {
+        label: "다시 시도",
+        onClick: () => location.reload(),
+      });
+    }
   };
   return (
     <div className="grid gap-6">
@@ -40,23 +65,20 @@ export default function UserProfile({ user }: { user: User }) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">이름</Label>
-                  <Input id="name" defaultValue={user?.user_metadata?.name} />
+                  <Input disabled id="name" defaultValue={name} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="username">사용자 이름</Label>
                   <Input
+                    ref={userNameRef}
                     id="username"
-                    defaultValue={user?.user_metadata?.user_name}
+                    defaultValue={user_name}
                   />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">이메일</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  defaultValue={user.user_metadata.email}
-                />
+                <Input disabled id="email" type="email" defaultValue={email} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="bio">자기소개</Label>
@@ -70,7 +92,7 @@ export default function UserProfile({ user }: { user: User }) {
           </div>
         </CardContent>
         <CardFooter className="flex justify-center md:justify-end">
-          <Button onClick={updateUser} className="w-full md:w-fit">
+          <Button onClick={updateUserName} className="w-full md:w-fit">
             저장하기
           </Button>
         </CardFooter>
