@@ -7,11 +7,33 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { User } from "@supabase/supabase-js";
+import supabase from "@/supabase/client";
+import axios from "axios";
+import { googleLogout } from "@/utils/auth/googleAuth";
+import { useState } from "react";
 
-export default function AccountSetting({ user }: { user: User }) {
-  const deleteUser = () => {
-    console.log(user);
+export default function AccountSetting() {
+  const [loading, setLoading] = useState(false);
+  const deleteAccount = async () => {
+    try {
+      setLoading(true);
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      await axios.delete("/api/delete-account", {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      setLoading(false);
+
+      googleLogout();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -29,8 +51,12 @@ export default function AccountSetting({ user }: { user: User }) {
         </p>
       </CardContent>
       <CardFooter>
-        <Button onClick={deleteUser} variant="destructive">
-          계정 삭제
+        <Button
+          disabled={loading}
+          onClick={deleteAccount}
+          variant="destructive"
+        >
+          {loading ? "삭제 중.." : "계정 삭제"}
         </Button>
       </CardFooter>
     </Card>

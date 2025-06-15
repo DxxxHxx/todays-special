@@ -26,7 +26,7 @@ export default function MyPage() {
           <UserProfile user={user} />
         </TabsContent>
         <TabsContent value="account">
-          <AccountSetting user={user} />
+          <AccountSetting />
         </TabsContent>
       </Tabs>
     </div>
