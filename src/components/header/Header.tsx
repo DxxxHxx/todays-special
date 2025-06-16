@@ -6,11 +6,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, LogOut } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { googleLogout } from "@/utils/auth/googleAuth";
 import ToggleButton from "../theme/toggleButton";
 import LoginButton from "../common/LoginButton";
+import HeaderAvatar, { PopoverList } from "./HeaderAvatar";
 
 export default function Header() {
   const user = useAuth();
@@ -34,7 +34,7 @@ export default function Header() {
             <Link
               key={item.href}
               to={item.href}
-              className="text-sm text-primary hover:text-blue-600"
+              className="text-sm text-primary hover:text-secondary-foreground"
             >
               {item.label}
             </Link>
@@ -44,14 +44,7 @@ export default function Header() {
         {/* 로그인 상태 버튼 */}
         <div className="hidden lg:flex md:gap-x-3">
           <ToggleButton />
-          {user ? (
-            <Button variant="ghost" onClick={googleLogout}>
-              <LogOut className="mr-2 h-4 w-4" />
-              로그아웃
-            </Button>
-          ) : (
-            <LoginButton />
-          )}
+          {user ? <HeaderAvatar id={user.id} /> : <LoginButton />}
         </div>
 
         {/* 모바일 메뉴 */}
@@ -68,7 +61,7 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent
               side="left"
-              className="flex flex-col space-y-4 pt-10  items-center"
+              className="flex flex-col space-y-4 pt-10 items-center"
             >
               <SheetTitle>
                 {" "}
@@ -82,14 +75,7 @@ export default function Header() {
                   {item.label}
                 </Link>
               ))}
-              {user ? (
-                <Button variant="ghost" onClick={googleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  로그아웃
-                </Button>
-              ) : (
-                <LoginButton />
-              )}
+              {user ? <PopoverList /> : <LoginButton />}
             </SheetContent>
           </Sheet>
         </div>
