@@ -7,7 +7,6 @@ const Layout = () => {
   const { theme } = useTheme();
   return (
     <div className="p-6">
-      {/* <ToggleButton /> */}
       <Header />
       <main>
         <Outlet />

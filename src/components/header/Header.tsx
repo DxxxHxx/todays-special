@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import ToggleButton from "../theme/toggleButton";
+import ThemeToggleButton from "../theme/ThemeToggleButton";
 import LoginButton from "../common/LoginButton";
 import HeaderAvatar, { PopoverList } from "./HeaderAvatar";
 
@@ -43,7 +43,7 @@ export default function Header() {
 
         {/* 로그인 상태 버튼 */}
         <div className="hidden lg:flex md:gap-x-3">
-          <ToggleButton />
+          <ThemeToggleButton />
           {user ? <HeaderAvatar id={user.id} /> : <LoginButton />}
         </div>
 
@@ -69,7 +69,7 @@ export default function Header() {
                   🍜 오늘 뭐 먹지?
                 </Link>
               </SheetTitle>
-              <ToggleButton />
+              <ThemeToggleButton />
               {navItems.map((item) => (
                 <Link key={item.href} to={item.href} className="text-base">
                   {item.label}
