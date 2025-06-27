@@ -49,7 +49,7 @@ export async function getMenuRecommendation(
     menu: filteredMenu,
     reason: reason ?? "",
     content,
-    user: user?.user_metadata.user_name ?? user.user_metadata.name ?? "익명",
+    user: user?.user_metadata.user_name ?? user?.user_metadata.name ?? "익명",
     hasMenu: !!filteredMenu, // 메뉴 추천 메세지면 true, 일반 대화형이면 false
   };
 
