@@ -8,13 +8,18 @@ import { MyPageTabType } from "@/types/type/myPage";
 import MyPageTabList from "@/components/myPage/MyPageTabList";
 import { User } from "@/types/interface/user";
 
+const tabType = {
+  profile: "profile" as const,
+  account: "account" as const,
+};
+
 export default function MyPage() {
   const [tab, setTab] = useState<MyPageTabType>("profile");
   const { user }: { user: User } = useOutletContext();
 
   return (
-    <div className=" mx-auto px-4 w-full md:max-w-2/3">
-      <div className="mb-10 m-auto w-fit md:mx-0">
+    <div className="w-full px-4 mx-auto  md:max-w-2/3">
+      <div className="m-auto mb-10 w-fit md:mx-0">
         <h1 className="text-3xl font-bold tracking-tight">마이페이지</h1>
       </div>
       <Tabs defaultValue={tab} className="w-full">
@@ -22,11 +27,11 @@ export default function MyPage() {
           tab={tab}
           handleTab={(tab: MyPageTabType) => setTab(tab)}
         />
-        <TabsContent value="profile">
+        <TabsContent value={tabType.profile}>
           <UserProfile user={user} />
         </TabsContent>
-        <TabsContent value="account">
-          <AccountSetting user={user} />
+        <TabsContent value={tabType.account}>
+          <AccountSetting />
         </TabsContent>
       </Tabs>
     </div>

@@ -1,4 +1,5 @@
 import { ChatResponse } from "@/types/interface/chatResponse";
+import { User } from "@/types/interface/user";
 import { getUser } from "@/utils/auth/googleAuth";
 import axios from "axios";
 
@@ -43,12 +44,12 @@ export async function getMenuRecommendation(
   const filteredMenu =
     menu.split("추천메뉴:").length > 1 ? menu.split("추천메뉴:")[1] : "";
 
-  const user = await getUser();
+  const user = (await getUser()) as User;
   const res = {
     menu: filteredMenu,
     reason: reason ?? "",
     content,
-    user: user?.user_metadata.name ?? "익명",
+    user: user?.user_metadata.user_name ?? user?.user_metadata.name ?? "익명",
     hasMenu: !!filteredMenu, // 메뉴 추천 메세지면 true, 일반 대화형이면 false
   };
 

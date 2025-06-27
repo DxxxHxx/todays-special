@@ -27,6 +27,14 @@ export default defineConfig({
         secure: false,
         ws: true,
       },
+      "/api/delete-account": {
+        target:
+          "https://secyvyavvwffrkyewhbt.supabase.co/functions/v1/delete-account",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/delete-account/, ""),
+        secure: false,
+        ws: true,
+      },
     },
   },
 });

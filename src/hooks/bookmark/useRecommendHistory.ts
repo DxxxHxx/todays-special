@@ -5,11 +5,14 @@ import { keepPreviousData, useQueries } from "@tanstack/react-query";
 import { RecommendHistory } from "@/types/interface/recommend";
 import { User } from "@supabase/supabase-js";
 import { PAGE_SIZE } from "@/components/history/list/HistoryList";
+import { useEffect } from "react";
+import { usePageIndexStore } from "@/store/history/usePageIndexStore";
 
 const useRecommendHistory = (type: HistoryType, pageIndex: number) => {
   const { user }: { user: User } = useOutletContext();
+  const handlePrevPage = usePageIndexStore((s) => s.handlePrevPage);
 
-  return useQueries({
+  const res = useQueries({
     queries: [
       {
         queryKey: ["my-menu-history", type],
@@ -72,6 +75,19 @@ const useRecommendHistory = (type: HistoryType, pageIndex: number) => {
       };
     },
   });
+
+  /**
+   * 페이지에 아이템 하나도 없으면 이전 페이지로 이동
+   * ex) 페이지에 즐겨찾기 아이템 한개 있을 때 즐겨찾기 삭제하면 이전 페이지로 이동
+   */
+  useEffect(() => {
+    if (res.data?.length === 0) {
+      handlePrevPage();
+      return;
+    }
+  }, [res.data, handlePrevPage]);
+
+  return res;
 };
 
 export default useRecommendHistory;
